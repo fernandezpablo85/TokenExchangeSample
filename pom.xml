@@ -5,6 +5,18 @@
   <artifactId>exchange</artifactId>
   <packaging>war</packaging>
   <version>0.1</version>
+  <repositories>
+    <repository>
+      <id>gson</id>
+      <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+</repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -22,6 +34,12 @@
       <artifactId>scribe</artifactId>
       <version>1.0.9</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>1.6</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>exchange</finalName>
@@ -34,6 +52,15 @@
       <scanIntervalSeconds>10</scanIntervalSeconds>
       <stopKey>foo</stopKey>
       <stopPort>9999</stopPort>
+      <connectors>
+	      <connector implementation="org.mortbay.jetty.security.SslSocketConnector">
+	      <port>8443</port>
+	      <maxIdleTime>60000</maxIdleTime>
+	      <keystore>target/jetty-ssl.keystore</keystore>
+	      <password>jetty6</password>
+	      <keyPassword>jetty6</keyPassword>
+	      </connector>
+      </connectors>
     </configuration>
     <executions>
       <execution>

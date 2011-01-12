@@ -18,13 +18,17 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
+import com.google.gson.Gson;
+
 public class Utils
 {
   public static final String KEY = "TRLHWeqqa-r0j2vBk6zavp-tWTbjQtfAjn2vc4edcdKxb_QmVcbmLOTB93atIhSV";
   private static final String ACCESS_TOKEN_ENDPOINT = "https://api.linkedin.com/uas/oauth/accessToken";
+  private static Gson parser = new Gson();
   
-  public static String exchangeToken(String token2)
+  public static String exchangeToken(String _cookie)
   {
+    OAuthCookie cookie = parseCookie(_cookie);
     // We need this in order to accept all SSL certs
     fixHttps();
     OAuthService service = new ServiceBuilder()
@@ -37,7 +41,7 @@ public class Utils
     OAuthRequest request = new OAuthRequest(Verb.POST, ACCESS_TOKEN_ENDPOINT);
     
     // Add the 2.0 token as a parameter
-    request.addBodyParameter("xoauth_oauth2_access_token", token2);
+    request.addBodyParameter("xoauth_oauth2_access_token", cookie.access_token);
     
     // Use an empty 1.0a access_token
     Token token = new Token("","");
@@ -45,9 +49,15 @@ public class Utils
     // Sign and then send the request
     service.signRequest(token, request);
     Response response = request.send();
-    return response.getBody();
+    cookie.oauth_one_token = response.getBody();
+    return parser.toJson(cookie);
   }
   
+  private static OAuthCookie parseCookie(String cookie)
+  { 
+    return parser.fromJson(cookie, OAuthCookie.class);
+  }
+
   // Plumbing code to accept all certificates
   private static void fixHttps()
   {
