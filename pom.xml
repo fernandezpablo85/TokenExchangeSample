@@ -17,8 +17,45 @@
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
     </dependency>
+    <dependency>
+      <groupId>org.scribe</groupId>
+      <artifactId>scribe</artifactId>
+      <version>1.0.9</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>exchange</finalName>
+    <plugins>
+    <plugin>
+    <groupId>org.mortbay.jetty</groupId>
+    <artifactId>maven-jetty-plugin</artifactId>
+    <version>6.1.10</version>
+    <configuration>
+      <scanIntervalSeconds>10</scanIntervalSeconds>
+      <stopKey>foo</stopKey>
+      <stopPort>9999</stopPort>
+    </configuration>
+    <executions>
+      <execution>
+        <id>start-jetty</id>
+        <phase>pre-integration-test</phase>
+        <goals>
+          <goal>run</goal>
+        </goals>
+        <configuration>
+          <scanIntervalSeconds>0</scanIntervalSeconds>
+          <daemon>true</daemon>
+        </configuration>
+      </execution>
+      <execution>
+        <id>stop-jetty</id>
+        <phase>post-integration-test</phase>
+        <goals>
+          <goal>stop</goal>
+        </goals>
+      </execution>
+    </executions>
+  </plugin>
+  </plugins>
   </build>
 </project>
