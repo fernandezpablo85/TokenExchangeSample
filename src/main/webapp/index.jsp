@@ -1,8 +1,9 @@
+<%@ page import="com.linkedin.oauth.helper.Utils" %>
 <html>
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
   <script src='http://platform.linkedin.com/in.js'>
-    api_key: TRLHWeqqa-r0j2vBk6zavp-tWTbjQtfAjn2vc4edcdKxb_QmVcbmLOTB93atIhSV
+    api_key: <%= Utils.KEY %>
     onLoad: window.frameworkLoaded
   </script>
   <script>

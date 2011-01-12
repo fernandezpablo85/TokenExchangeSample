@@ -20,6 +20,7 @@ import org.scribe.oauth.OAuthService;
 
 public class Utils
 {
+  public static final String KEY = "TRLHWeqqa-r0j2vBk6zavp-tWTbjQtfAjn2vc4edcdKxb_QmVcbmLOTB93atIhSV";
   private static final String ACCESS_TOKEN_ENDPOINT = "https://api.linkedin.com/uas/oauth/accessToken";
   
   public static String exchangeToken(String token2)
@@ -27,7 +28,7 @@ public class Utils
     // We need this in order to accept all SSL certs
     fixHttps();
     OAuthService service = new ServiceBuilder()
-                                  .apiKey("TRLHWeqqa-r0j2vBk6zavp-tWTbjQtfAjn2vc4edcdKxb_QmVcbmLOTB93atIhSV")
+                                  .apiKey(Utils.KEY)
                                   .apiSecret("MPXgUasPngzU71aThOozHKXGRi0s9f7AtmssFdculA9A0FJ8x1dquTAc_1pRc_qT")
                                   .provider(LinkedInApi.class)
                                   .build();
