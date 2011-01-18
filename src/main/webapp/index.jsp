@@ -5,6 +5,7 @@
   <script src='http://platform.linkedin.com/in.js'>
     api_key: <%= Utils.KEY %>
     onLoad: window.frameworkLoaded
+    credentials_cookie: true
   </script>
   <script>
     function frameworkLoaded () {
