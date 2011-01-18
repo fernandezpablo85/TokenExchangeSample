@@ -1,5 +1,11 @@
 package com.linkedin.oauth;
 
+import java.util.Map;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.LinkedInApi;
 import org.scribe.model.OAuthRequest;
@@ -29,6 +35,11 @@ public class ExchangeService
   {
     OAuthCookie cookie = parseCookie(_cookie);
     
+    if (!isValid(cookie))
+    {
+      throw new IllegalArgumentException("Signature Invalid");
+    }
+    
     // We need this in order to accept all SSL certs
     Utils.trustSelfSignedCertificates();
     OAuthService service = new ServiceBuilder()
@@ -53,6 +64,36 @@ public class ExchangeService
     return parser.toJson(cookie);
   }
   
+  private boolean isValid(OAuthCookie cookie)
+  {
+    Map<String, String> map = cookie.toMap();
+    String[] order = cookie.signature_order.split(",");
+    
+    //Generate the string to sign
+    String baseString = "";
+    for(String key : order)
+    {
+      baseString += map.get(key);
+    }
+    byte[] sha = shaSign(baseString, ExchangeService.SECRET);
+    return Hex.encodeHexString(sha).equalsIgnoreCase(cookie.signature);
+  }
+  
+  private byte[] shaSign(String baseString, String secret)
+  {
+    try
+    {
+      Mac mac = Mac.getInstance("HmacSHA1");
+      SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(),"HmacSHA1");
+      mac.init(secretKey);
+      return mac.doFinal(baseString.getBytes());  
+    }
+    catch(Exception e)
+    {
+      throw new IllegalStateException("Error while generating the HMAC-SHA1 signature", e);
+    }    
+  }
+
   private OAuthCookie parseCookie(String cookie)
   { 
     return parser.fromJson(cookie, OAuthCookie.class);
