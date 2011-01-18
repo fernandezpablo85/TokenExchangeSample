@@ -1,9 +1,9 @@
-<%@ page import="com.linkedin.oauth.helper.Utils" %>
+<%@ page import="com.linkedin.oauth.ExchangeService" %>
 <html>
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
   <script src='http://platform.linkedin.com/in.js'>
-    api_key: <%= Utils.KEY %>
+    api_key: <%= ExchangeService.KEY %>
     onLoad: window.frameworkLoaded
     credentials_cookie: true
   </script>
@@ -17,9 +17,9 @@
       $('#obtain').click(function(){
         $.get("./process_cookie.jsp", function(response) {
           var response = JSON.parse(response);
-          $('#contents').append('<p>The original OAuth 2.0 token is:</p>');
+          $('#contents').append('<h3>The original OAuth 2.0 token is:</h3>');
           $('#contents').append('<code>' + response.access_token + '</code>');
-          $('#contents').append('<p>The response from the exchange is:</p>');
+          $('#contents').append('<h3>The response from the exchange is:</h3>');
           $('#contents').append('<code>' + response.oauth_one_token + '</code>');
         });
       });

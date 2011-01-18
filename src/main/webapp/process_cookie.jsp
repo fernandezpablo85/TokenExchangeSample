@@ -1,13 +1,14 @@
-<%@ page import="com.linkedin.oauth.helper.Utils" %>
+<%@ page import="com.linkedin.oauth.ExchangeService" %>
 <%@ page import="javax.servlet.http.Cookie" %>
 <% String exchanged = ""; %>
+<% ExchangeService service = ExchangeService.instance; %>
 <% 
 for(Cookie c : request.getCookies()) 
 {
-  if(c.getName().equals("linkedin_oauth_" + Utils.KEY)) 
+  if(c.getName().equals("linkedin_oauth_" + ExchangeService.KEY)) 
   {
     String value = c.getValue();
-    exchanged = Utils.exchangeToken(value);
+    exchanged = service.exchangeToken(value);
   }
 }
 %>
