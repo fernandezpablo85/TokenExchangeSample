@@ -1,4 +1,4 @@
-package com.linkedin.oauth.helper;
+package com.linkedin.oauth;
 
 public class OAuthCookie
 {
